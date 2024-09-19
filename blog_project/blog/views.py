@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404,redirect
+from django.shortcuts import render, get_object_or_404,redirect,HttpResponse
 from django.core.paginator import Paginator
 from .models import Blog, Comment
 from .forms import CommentForm
 from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout 
+from .utils import *
 
 
 def home(request):
@@ -74,12 +75,12 @@ def blog_detail(request, pk):
         'form': form,
     })
 
-def share_blog(request, blog_id):
-    blog = get_object_or_404(Blog, id=blog_id)
+def share_blog(request):
     if request.method == 'POST':
-        recipient_email = request.POST['email']
-        send_mail(f"Check out this blog: {blog.title}", blog.content, 'your_email@example.com', [recipient_email])
-    return redirect(blog.get_absolute_url())
+        title = request.POST['title']
+        url = request.POST['url']
+        notify_all_users_about_blog(title,url)
+        return HttpResponse({"message":"blog send successfully"})
 
 def like_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
