@@ -1,4 +1,5 @@
 Step 1 :-> clone project from repo
+
 Step 2 :-> create a virtual env and activate it using virtualenv
 
 Step 3 :-> install requirements.txt using CMD - pip install -r requirements.txt
